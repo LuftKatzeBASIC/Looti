@@ -94,11 +94,10 @@ namespace DuskOS.DuskSystem.Applications
             string arrow = "";
             string old = File.ReadAllText(@PATH);
             tosav = File.ReadAllText(@PATH);
-            Console.Clear();
             for (; ; ) {
-                Console.Clear();
                 Console.BackgroundColor = EditorBg;
                 Console.ForegroundColor = EditorFg;
+                Console.Clear();
                 Console.Write("\n\n");
                 if (tosav.Split("\n").Length > 22)
                 {
@@ -544,9 +543,13 @@ namespace DuskOS.DuskSystem.Applications
                         Console.SetCursorPosition(20, 13);
                         Console.Write($"{index} [                             ]");
                         Console.SetCursorPosition(23, 13);
-                        Console.Write(config[index]);
+                        Console.Write($"{config[index]} (");
+
+                        Console.ForegroundColor = (ConsoleColor)config[index];
+                        Console.Write(".");
                         Console.ForegroundColor = EnterFg;
                         Console.BackgroundColor = EnterBg;
+                        Console.Write(")");
                         input = Console.ReadKey();
                         if (input.Key == ConsoleKey.F3)
                         {
@@ -576,12 +579,25 @@ namespace DuskOS.DuskSystem.Applications
                             }
                             index--;
                         }
+                        else if (input.Key == ConsoleKey.F5)
+                        {
+                            config = new byte[] { (int)ConsoleColor.Black, (int)ConsoleColor.Gray, (int)ConsoleColor.Black, (int)ConsoleColor.White, (int)ConsoleColor.Blue, (int)ConsoleColor.Gray, (int)ConsoleColor.Gray, (int)ConsoleColor.Black };
+
+                        }
                         else
                         {
                             File.WriteAllBytes("lticonf.bin", config);
                             Console.BackgroundColor = EditorBg;
                             Console.Clear();
                             DrawBar(@PATH, tosav, arrow, old);
+                            BarFg = (ConsoleColor)config[0];
+                            BarBg = (ConsoleColor)config[1];
+                            EnterBg = (ConsoleColor)config[2];
+                            EnterFg = (ConsoleColor)config[3];
+                            EditorBg = (ConsoleColor)config[4];
+                            EditorFg = (ConsoleColor)config[5];
+                            MenuBg = (ConsoleColor)config[6];
+                            MenuFg = (ConsoleColor)config[7];
                             break;
                         }
                     }
@@ -777,7 +793,8 @@ namespace DuskOS.DuskSystem.Applications
         }
         public static void DrawBar(string PATH, string tosav, string arrow, string old)
         {
-
+            Console.Clear();
+            Console.ForegroundColor = EditorFg;
             Console.BackgroundColor = EditorBg;
             Console.Clear();
             Drw(PATH, tosav, arrow, old);

@@ -12,11 +12,10 @@ namespace DuskOS.DuskSystem.Applications
         public static bool repalcevars = false;
         public static bool IDE = false;
         public static int xint;
-        public static bool click = false;
         public static bool wrap = true;
         static string tosav;
         static string cursor = " ";
-        static string ver = "INDEV 1.8";
+        public static string ver = "INDEV 1.9";
 
         static ConsoleColor BarFg = ConsoleColor.Black;
         static ConsoleColor BarBg = ConsoleColor.Gray;
@@ -55,6 +54,7 @@ namespace DuskOS.DuskSystem.Applications
                 else if (PATH == "") { PATH = argv[i]; if (!PATH.Contains("\\"))
                     {
                         PATH = Directory.GetCurrentDirectory() + $"\\{PATH}";
+                        PATH = PATH.Replace("\\\\", "\\");
                     }
                 }
                 else { Console.Write("\nUnknow argument - "); Console.ForegroundColor = ConsoleColor.Red; Console.Write(argv[i]); Console.ForegroundColor = ConsoleColor.White; Console.CursorVisible = true; return null; }
@@ -65,10 +65,10 @@ namespace DuskOS.DuskSystem.Applications
             if (File.Exists("lticonf.bin"))
             {
                 byte[] config = File.ReadAllBytes("lticonf.bin");
-                if (config.Length != 8)
+                if (config.Length != 11)
                 {
                     File.WriteAllText("Looti.log", "> Invalid lticonf.bin");
-                    File.WriteAllBytes("lticonf.bin", new byte[] { (int)ConsoleColor.Black, (int)ConsoleColor.Gray, (int)ConsoleColor.Black, (int)ConsoleColor.White, (int)ConsoleColor.Blue, (int)ConsoleColor.Gray, (int)ConsoleColor.Gray, (int)ConsoleColor.Black });
+                    File.WriteAllBytes("lticonf.bin", new byte[] { (int)ConsoleColor.Black, (int)ConsoleColor.Gray, (int)ConsoleColor.Black, (int)ConsoleColor.White, (int)ConsoleColor.Blue, (int)ConsoleColor.Gray, (int)ConsoleColor.Gray, (int)ConsoleColor.Black, 1,1,1 });
                 }
                 BarFg = (ConsoleColor)config[0];
                 BarBg = (ConsoleColor)config[1];
@@ -402,7 +402,6 @@ namespace DuskOS.DuskSystem.Applications
                             "     * Added ability to change colors\n" +
                             "     * Better text drawing code\n" +
                             "     * Faster code\n" +
-                            "     Todo:\n" +
                             "     * Config file"
                             ) ;
                         Console.ReadKey();
@@ -565,7 +564,7 @@ namespace DuskOS.DuskSystem.Applications
                         }
                         else if (input.Key == ConsoleKey.F1)
                         {
-                            if (index == 7)
+                            if (index == 10)
                             {
                                 index=0;
                             }
@@ -581,7 +580,7 @@ namespace DuskOS.DuskSystem.Applications
                         }
                         else if (input.Key == ConsoleKey.F5)
                         {
-                            config = new byte[] { (int)ConsoleColor.Black, (int)ConsoleColor.Gray, (int)ConsoleColor.Black, (int)ConsoleColor.White, (int)ConsoleColor.Blue, (int)ConsoleColor.Gray, (int)ConsoleColor.Gray, (int)ConsoleColor.Black };
+                            config = new byte[] { (int)ConsoleColor.Black, (int)ConsoleColor.Gray, (int)ConsoleColor.Black, (int)ConsoleColor.White, (int)ConsoleColor.Blue, (int)ConsoleColor.Gray, (int)ConsoleColor.Gray, (int)ConsoleColor.Black,1,1,1 };
 
                         }
                         else
@@ -598,6 +597,9 @@ namespace DuskOS.DuskSystem.Applications
                             EditorFg = (ConsoleColor)config[5];
                             MenuBg = (ConsoleColor)config[6];
                             MenuFg = (ConsoleColor)config[7];
+                            repalcevars = config[8] == 1 ? true : false;
+                            wrap = config[9] == 1 ? true : false;
+                            IDE = config[10] == 1 ? true : false;
                             break;
                         }
                     }

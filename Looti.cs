@@ -99,9 +99,9 @@ namespace DuskOS.DuskSystem.Applications
                 Console.ForegroundColor = EditorFg;
                 Console.Clear();
                 Console.Write("\n\n");
-                if (tosav.Split("\n").Length > 22)
+                if (tosav.Split("\n").Length > Console.WindowHeight-3)
                 {
-                    for(int i=tosav.Split('\n').Length - 22; i < tosav.Split('\n').Length; i++)
+                    for(int i=tosav.Split('\n').Length - Console.WindowHeight - 3; i < tosav.Split('\n').Length; i++)
                     {
                         Console.Write(tosav.Split('\n')[i]);
                         if (i != tosav.Split('\n').Length - 1 || !tosav.EndsWith('\n'))
